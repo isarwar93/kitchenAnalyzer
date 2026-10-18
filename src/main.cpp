@@ -36,7 +36,9 @@ void wokeUpWork(bool setupFunction) {
         lastMotionTime = millis();
 
         // Read and display sensor values
-        // int gasValue = analogRead(PIN_GAS_SENSOR);
+        int gasValue = analogRead(PIN_GAS_SENSOR);
+        Serial.print("Gas sensor raw value: ");
+        Serial.println(gasValue);
         MQ2.update();
         gasValue = MQ2.readSensor();
         temperature = dht.readTemperature();
@@ -67,7 +69,8 @@ void wokeUpWork(bool setupFunction) {
             lcd.print("H:");
             lcd.print(humidity, 1);
             lcd.print("   M:");
-            lcd.print(currentMotion ? 1 : 0);            long remaining = NO_MOTION_TIMEOUT_S;
+            lcd.print(currentMotion ? 1 : 0);            
+            long remaining = NO_MOTION_TIMEOUT_S;
             lcd.setCursor(14, 1);
             if (remaining < 10) lcd.print("0");
             lcd.print(remaining);            Serial.println("LCD updated with sensor values");
@@ -90,6 +93,10 @@ void wokeUpWork(bool setupFunction) {
             temperature = dht.readTemperature();
             humidity = dht.readHumidity();
 
+
+            int rawGasValue = analogRead(PIN_GAS_SENSOR);
+            Serial.print("Gas sensor raw value: ");
+            Serial.println(rawGasValue);
             Serial.print("Gas: ");
             Serial.print(gasValue);
             Serial.print(", Temp: ");
@@ -127,7 +134,7 @@ void wokeUpWork(bool setupFunction) {
 }
 
 void setup() {
-    // Serial.begin(115200);
+    //Serial.begin(115200); -> only while debugging, comment out for low power consumption
     Serial.println("Kitchen Analyzer starting...");
 
     pinMode(PIN_GAS_SENSOR, INPUT);
